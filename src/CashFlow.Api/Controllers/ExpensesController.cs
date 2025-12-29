@@ -25,7 +25,7 @@ public class ExpensesController : ControllerBase
         {
             var errorResponse = new ResponseErrorJson(ex.Message);
 
-            return BadRequest(ex.Message);
+            return BadRequest(errorResponse);
         }
         catch
         {
