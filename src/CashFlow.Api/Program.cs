@@ -11,7 +11,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionFilter))); // Register the exception filter globally
 
-builder.Services.AddInfrastructure(); // Register infrastructure services
+builder.Services.AddInfrastructure(builder.Configuration); // Register infrastructure services
 builder.Services.AddApplication(); // Register application services
 
 var app = builder.Build();
