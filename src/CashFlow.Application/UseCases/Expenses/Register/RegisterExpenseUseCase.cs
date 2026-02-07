@@ -7,13 +7,13 @@ using CashFlow.Domain.Repositories.Expenses;
 using CashFlow.Exception.ExceptionsBase;
 
 namespace CashFlow.Application.UseCases.Expenses.Register;
-public class ReigsterExpenseUseCase : IRegisterExpenseUseCase
+public class RegisterExpenseUseCase : IRegisterExpenseUseCase
 {
     private readonly IExpensesRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public ReigsterExpenseUseCase(
+    public RegisterExpenseUseCase(
         IExpensesRepository repository, 
         IUnitOfWork unitOfWork,
         IMapper mapper)
