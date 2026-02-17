@@ -1,7 +1,8 @@
-﻿
+﻿using CashFlow.Domain.Extensions;
 using CashFlow.Domain.Reports;
 using CashFlow.Domain.Repositories.Expenses;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace CashFlow.Application.UseCases.Expenses.Reports.Excel;
 public class GenerateExpensesReportExcelUseCase : IGenerateExpensesReportExcelUseCase
@@ -24,14 +25,27 @@ public class GenerateExpensesReportExcelUseCase : IGenerateExpensesReportExcelUs
 
         var workbook = new XLWorkbook();
 
-        workbook.Author = "Welisson Arley";
+        workbook.Author = "Leonardo Gussi";
         workbook.Style.Font.FontSize = 12;
         workbook.Style.Font.FontName = "Times New Roman";
 
         var worksheet = workbook.Worksheets.Add(month.ToString("Y"));
 
         InsertHeader(worksheet);
-        
+
+        var row = 2;
+
+        foreach (var expense in expenses)
+        {
+            worksheet.Cell($"A{row}").Value = expense.Title;
+            worksheet.Cell($"B{row}").Value = expense.Date;
+            worksheet.Cell($"C{row}").Value = expense.PaymentType.PaymentTypeToString();
+            worksheet.Cell($"D{row}").Value = expense.Amount;
+            worksheet.Cell($"E{row}").Value = expense.Description;
+
+            row++;
+        }
+
         var file  = new MemoryStream();
         workbook.SaveAs(file);
 
