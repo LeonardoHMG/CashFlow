@@ -1,4 +1,4 @@
-﻿using CashFlow.Domain.Extensions;
+﻿using CashFlow.Domain.Enums.Extensions;
 using CashFlow.Domain.Reports;
 using CashFlow.Domain.Repositories.Expenses;
 using ClosedXML.Excel;
@@ -7,6 +7,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 namespace CashFlow.Application.UseCases.Expenses.Reports.Excel;
 public class GenerateExpensesReportExcelUseCase : IGenerateExpensesReportExcelUseCase
 {
+    private const string CURRENCY_SYMBOl = "R$";
     private readonly IExpensesReadOnlyRepository _repository;
 
     public GenerateExpensesReportExcelUseCase(IExpensesReadOnlyRepository repository)
@@ -35,16 +36,22 @@ public class GenerateExpensesReportExcelUseCase : IGenerateExpensesReportExcelUs
 
         var row = 2;
 
+        var currencySymbol = ResourceReportGenerationMessages.CURRENCY_SYMBOL;
+
+
         foreach (var expense in expenses)
         {
             worksheet.Cell($"A{row}").Value = expense.Title;
             worksheet.Cell($"B{row}").Value = expense.Date;
             worksheet.Cell($"C{row}").Value = expense.PaymentType.PaymentTypeToString();
             worksheet.Cell($"D{row}").Value = expense.Amount;
+            worksheet.Cell($"D{row}").Style.NumberFormat.Format = $"\"-{currencySymbol}\" #,##0.00";
             worksheet.Cell($"E{row}").Value = expense.Description;
 
             row++;
         }
+
+        worksheet.Columns().AdjustToContents();
 
         var file  = new MemoryStream();
         workbook.SaveAs(file);

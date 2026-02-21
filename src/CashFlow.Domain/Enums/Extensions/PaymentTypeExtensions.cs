@@ -1,7 +1,7 @@
 ﻿using CashFlow.Domain.Enums;
 using CashFlow.Domain.Reports;
 
-namespace CashFlow.Domain.Extensions;
+namespace CashFlow.Domain.Enums.Extensions;
 public static class PaymentTypeExtensions
 {
     public static string PaymentTypeToString(this PaymentType paymentType)
