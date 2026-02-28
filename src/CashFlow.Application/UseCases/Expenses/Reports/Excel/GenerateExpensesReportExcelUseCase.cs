@@ -2,6 +2,7 @@
 using CashFlow.Domain.Reports;
 using CashFlow.Domain.Repositories.Expenses;
 using ClosedXML.Excel;
+using System.Globalization;
 
 namespace CashFlow.Application.UseCases.Expenses.Reports.Excel;
 public class GenerateExpensesReportExcelUseCase : IGenerateExpensesReportExcelUseCase
@@ -34,7 +35,8 @@ public class GenerateExpensesReportExcelUseCase : IGenerateExpensesReportExcelUs
 
         var row = 2;
 
-        var currencySymbol = ResourceReportGenerationMessages.CURRENCY_SYMBOL;
+        var numberFormat = CultureInfo.CurrentCulture.NumberFormat;
+        var symbol = numberFormat.CurrencySymbol;
 
 
         foreach (var expense in expenses)
@@ -43,7 +45,16 @@ public class GenerateExpensesReportExcelUseCase : IGenerateExpensesReportExcelUs
             worksheet.Cell($"B{row}").Value = expense.Date;
             worksheet.Cell($"C{row}").Value = ConvertPaymentType(expense.PaymentType); ;
             worksheet.Cell($"D{row}").Value = expense.Amount;
-            worksheet.Cell($"D{row}").Style.NumberFormat.Format = $"\"-{currencySymbol}\" #,##0.00";
+            var cellAmount = worksheet.Cell($"D{row}");
+            cellAmount.Value = expense.Amount;
+            if (numberFormat.CurrencyPositivePattern == 0 || numberFormat.CurrencyPositivePattern == 2)
+            {
+                cellAmount.Style.NumberFormat.Format = $"\"-{symbol}\" #,##0.00";
+            }
+            else
+            {
+                cellAmount.Style.NumberFormat.Format = $"-#,##0.00 \"{symbol}\"";
+            }
             worksheet.Cell($"E{row}").Value = expense.Description;
 
             row++;

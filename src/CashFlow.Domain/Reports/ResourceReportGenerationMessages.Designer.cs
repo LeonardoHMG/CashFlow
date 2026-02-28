@@ -88,15 +88,6 @@ namespace CashFlow.Domain.Reports {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to US$.
-        /// </summary>
-        public static string CURRENCY_SYMBOL {
-            get {
-                return ResourceManager.GetString("CURRENCY_SYMBOL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Date.
         /// </summary>
         public static string DATE {
@@ -160,7 +151,7 @@ namespace CashFlow.Domain.Reports {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total spent in {0}.
+        ///   Looks up a localized string similar to Total spent in.
         /// </summary>
         public static string TOTAL_SPENT_IN {
             get {

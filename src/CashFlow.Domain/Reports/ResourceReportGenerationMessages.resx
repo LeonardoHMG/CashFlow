@@ -126,9 +126,6 @@
   <data name="CREDIT_CARD" xml:space="preserve">
     <value>Credit Card</value>
   </data>
-  <data name="CURRENCY_SYMBOL" xml:space="preserve">
-    <value>US$</value>
-  </data>
   <data name="DATE" xml:space="preserve">
     <value>Date</value>
   </data>
@@ -151,6 +148,6 @@
     <value>Title</value>
   </data>
   <data name="TOTAL_SPENT_IN" xml:space="preserve">
-    <value>Total spent in {0}</value>
+    <value>Total spent in</value>
   </data>
 </root>

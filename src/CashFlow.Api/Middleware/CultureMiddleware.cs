@@ -17,7 +17,7 @@ public class CultureMiddleware
 
         var requestedCulture = context.Request.Headers.AcceptLanguage.FirstOrDefault();
 
-        var cultureInfo = new CultureInfo("en");
+        var cultureInfo = new CultureInfo("en-US");
 
         if (string.IsNullOrWhiteSpace(requestedCulture) == false
             && supportedLanguages.Exists(language => language.Name.Equals(requestedCulture)))
