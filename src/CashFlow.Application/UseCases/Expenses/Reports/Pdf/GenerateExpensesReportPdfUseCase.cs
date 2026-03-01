@@ -60,6 +60,26 @@ public class GenerateExpensesReportPdfUseCase : IGenerateExpensesReportPdfUseCas
             row.Cells[3].VerticalAlignment = VerticalAlignment.Center;
 
             row = table.AddRow();
+            row.Height = 25;
+
+            row.Cells[0].AddParagraph(expense.Date.ToString("D"));
+            row.Cells[0].Format.Font = new Font { Name = FontHelper.WORKSANS_REGULAR, Size = 12, Color = ColorsHelper.BLACK };
+            row.Cells[0].Shading.Color = ColorsHelper.GREEN_DARK;
+            row.Cells[0].VerticalAlignment = VerticalAlignment.Center;
+            row.Cells[0].Format.LeftIndent = 20;
+
+            row.Cells[1].AddParagraph(expense.Date.ToString("t"));
+            row.Cells[1].Format.Font = new Font { Name = FontHelper.WORKSANS_REGULAR, Size = 12, Color = ColorsHelper.BLACK };
+            row.Cells[1].Shading.Color = ColorsHelper.GREEN_DARK;
+            row.Cells[1].VerticalAlignment = VerticalAlignment.Center;
+
+            string formattedValue = FormatCurrency(expense.Amount);
+            row.Cells[3].AddParagraph(formattedValue);
+            row.Cells[3].Format.Font = new Font { Name = FontHelper.WORKSANS_REGULAR, Size = 14, Color = ColorsHelper.BLACK };
+            row.Cells[3].Shading.Color = ColorsHelper.WHITE;
+            row.Cells[3].VerticalAlignment = VerticalAlignment.Center;
+
+            row = table.AddRow();
             row.Height = 30;
             row.Borders.Visible = false;
         }
@@ -114,6 +134,23 @@ public class GenerateExpensesReportPdfUseCase : IGenerateExpensesReportPdfUseCas
         row.Cells[1].VerticalAlignment = MigraDoc.DocumentObjectModel.Tables.VerticalAlignment.Center;
     }
 
+    private string FormatCurrency(decimal amount, bool isExpense = true)
+    {
+        var culture = CultureInfo.CurrentCulture;
+        var numberFormat = culture.NumberFormat;
+        var symbol = numberFormat.CurrencySymbol;
+
+        string numberPart = Math.Abs(amount).ToString("N2", culture);
+        string sign = isExpense ? "-" : "";
+
+        if (numberFormat.CurrencyPositivePattern == 0 || numberFormat.CurrencyPositivePattern == 2)
+        {
+            return $"{sign}{symbol} {numberPart}";
+        }
+
+        return $"{sign}{numberPart} {symbol}";
+    }
+
     private void CreateTotalSpentSection(Section page, DateOnly month, decimal totalExpenses)
     {
         var paragraph = page.AddParagraph();
@@ -126,7 +163,7 @@ public class GenerateExpensesReportPdfUseCase : IGenerateExpensesReportPdfUseCas
 
         paragraph.AddLineBreak();
 
-        string formattedValue = totalExpenses.ToString("C", CultureInfo.CurrentCulture);
+        string formattedValue = FormatCurrency(totalExpenses, isExpense: false);
 
         formattedValue = formattedValue.Replace('\u00A0', ' ').Replace('\u202F', ' ');
 
