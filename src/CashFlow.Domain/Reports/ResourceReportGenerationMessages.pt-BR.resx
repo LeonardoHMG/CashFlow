@@ -148,6 +148,6 @@
     <value>Título</value>
   </data>
   <data name="TOTAL_SPENT_IN" xml:space="preserve">
-    <value>Total gasto em</value>
+    <value>Total gasto em {0}</value>
   </data>
 </root>
