@@ -15,3 +15,23 @@ Para otimizar o desenvolvimento e garantir a qualidade do código, o projeto faz
 - **Business Intelligence & Reports**: Geração de relatórios analíticos em **PDF e Excel**, transformando dados brutos em insights visuais para uma gestão financeira estratégica.
 
 - **API RESTful com Swagger**: Interface padronizada e totalmente documentada, otimizando a experiência do desenvolvedor e agilizando integrações.
+
+# Getting Started
+
+Para obter uma cópia local funcionando, siga estes passos simples.
+
+### Requisitos
+
+* Visual Studio versão 2022+ ou Visual Studio Code
+* Windows 10+ ou Linux/MacOS com [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) instalado
+* MySql Server
+
+### Instalação
+
+1. Clone o repositório:
+    ```sh
+    git clone https://github.com/LeonardoHMG/CashFlow.git
+    ```
+
+2. Preencha as informações no arquivo `appsettings.Development.json`.
+3. Execute a API e aproveite o seu teste :)
