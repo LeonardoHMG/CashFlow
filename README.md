@@ -6,6 +6,8 @@ A arquitetura da API baseia-se no modelo **REST**, utilizando os métodos **HTTP
 
 Para otimizar o desenvolvimento e garantir a qualidade do código, o projeto faz uso de pacotes NuGet essenciais. O **AutoMapper** é responsável pelo mapeamento ágil entre os objetos de domínio e os de requisição/resposta, reduzindo drasticamente a necessidade de código manual e repetitivo. Já o **FluentValidation** implementa as regras de validação de forma simples e intuitiva diretamente nas classes de requisição, mantendo o código limpo, centralizado e de fácil manutenção. No contexto de garantia de qualidade, o **Shouldly** é utilizado nos testes de unidade para tornar as verificações mais expressivas e legíveis, ajudando na construção de testes claros e compreensíveis. Por fim, o **Entity Framework Core** atua como o ORM (Object-Relational Mapper) da aplicação, simplificando as interações com o banco de dados e permitindo a manipulação dos dados diretamente através de objetos .NET, abstraindo a complexidade de consultas SQL manuais.
 
+![hero-image]
+
 ### Features
 
 - **Domain-Driven Design (DDD)**: Estrutura modular focada na clareza do negócio e na facilidade de manutenção a longo prazo.
@@ -23,7 +25,7 @@ Para obter uma cópia local funcionando, siga estes passos simples.
 ### Requisitos
 
 * Visual Studio versão 2022+ ou Visual Studio Code
-* Windows 10+ ou Linux/MacOS com [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) instalado
+* Windows 10+ ou Linux/MacOS com [.NET SDK][dot-net-sdk] instalado
 * MySql Server
 
 ### Instalação
@@ -35,3 +37,10 @@ Para obter uma cópia local funcionando, siga estes passos simples.
 
 2. Preencha as informações no arquivo `appsettings.Development.json`.
 3. Execute a API e aproveite o seu teste :)
+
+
+<!-- Links -->
+[dot-net-sdk]: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+
+<!-- Images -->
+[hero-image]: images/heroimage.png
