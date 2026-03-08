@@ -7,12 +7,12 @@ using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
 using PdfSharp.Fonts;
-using System.Globalization;
 using System.Reflection;
 
 namespace CashFlow.Application.UseCases.Expenses.Reports.Pdf;
 public class GenerateExpensesReportPdfUseCase : IGenerateExpensesReportPdfUseCase
 {
+    private const string CURRENCY_SYMBOL = "€";
     private const int HEIGHT_ROW_EXPENSE_TABLE = 25;
 
     private readonly IExpensesReadOnlyRepository _repository;
@@ -102,23 +102,6 @@ public class GenerateExpensesReportPdfUseCase : IGenerateExpensesReportPdfUseCas
         return document;
     }
 
-    private string FormatCurrency(decimal amount, bool isExpense = true)
-    {
-        var culture = CultureInfo.CurrentCulture;
-        var numberFormat = culture.NumberFormat;
-        var symbol = numberFormat.CurrencySymbol;
-
-        string numberPart = Math.Abs(amount).ToString("N2", culture);
-        string sign = isExpense ? "-" : "";
-
-        if (numberFormat.CurrencyPositivePattern == 0 || numberFormat.CurrencyPositivePattern == 2)
-        {
-            return $"{sign}{symbol} {numberPart}";
-        }
-
-        return $"{sign}{numberPart} {symbol}";
-    }
-
     private Section CreatePage(Document document)
     {
         var section = document.AddSection();
@@ -165,11 +148,7 @@ public class GenerateExpensesReportPdfUseCase : IGenerateExpensesReportPdfUseCas
 
         paragraph.AddLineBreak();
 
-        string formattedValue = FormatCurrency(totalExpenses, isExpense: false);
-
-        formattedValue = formattedValue.Replace('\u00A0', ' ').Replace('\u202F', ' ');
-
-        paragraph.AddFormattedText(formattedValue, new Font { Name = FontHelper.WORKSANS_BLACK, Size = 50 });
+        paragraph.AddFormattedText($"{totalExpenses} {CURRENCY_SYMBOL}", new Font { Name = FontHelper.WORKSANS_BLACK, Size = 50 });
     }
 
     private Table CreateExpenseTable(Section page)
@@ -180,7 +159,6 @@ public class GenerateExpensesReportPdfUseCase : IGenerateExpensesReportPdfUseCas
         table.AddColumn("80").Format.Alignment = ParagraphAlignment.Center;
         table.AddColumn("120").Format.Alignment = ParagraphAlignment.Center;
         table.AddColumn("120").Format.Alignment = ParagraphAlignment.Right;
-
         return table;
     }
 
@@ -211,8 +189,7 @@ public class GenerateExpensesReportPdfUseCase : IGenerateExpensesReportPdfUseCas
 
     private void AddAmountForExpense(Cell cell, decimal amount)
     {
-        string formattedValue = FormatCurrency(amount);
-        cell.AddParagraph(formattedValue);
+        cell.AddParagraph($"-{amount} {CURRENCY_SYMBOL}");
         cell.Format.Font = new Font { Name = FontHelper.WORKSANS_REGULAR, Size = 14, Color = ColorsHelper.BLACK };
         cell.Shading.Color = ColorsHelper.WHITE;
         cell.VerticalAlignment = VerticalAlignment.Center;
