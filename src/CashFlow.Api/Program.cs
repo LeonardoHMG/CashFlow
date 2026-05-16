@@ -93,3 +93,5 @@ async Task MigrateDatabase()
 
     await DataBaseMigration.MigrateDataBase(scope.ServiceProvider);
 }
+
+public partial class Program { } // Make the Program class public for testing purposes
