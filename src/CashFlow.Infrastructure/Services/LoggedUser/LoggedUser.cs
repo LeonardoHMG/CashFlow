@@ -22,13 +22,13 @@ public class LoggedUser : ILoggedUser
     public async Task<User> Get()
     {
         string token = _tokenProvider.TokenOnRequest();
-
+        
         var tokenHandler = new JwtSecurityTokenHandler();
 
         var jwtSecurityToken = tokenHandler.ReadJwtToken(token);
 
-        var identifier = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimValueTypes.Sid).Value;
-        
+        var identifier = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Sid).Value;
+
         return await _dbContext
             .Users
             .AsNoTracking()
