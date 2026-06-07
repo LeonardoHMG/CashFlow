@@ -3,21 +3,16 @@ using CommonTestUtilities.Requests;
 using Shouldly;
 using System.Globalization;
 using System.Net;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text.Json;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.Users.Register;
-public class RegisterUserTest: IClassFixture<CustomWebApplicationFactory>
+public class RegisterUserTest : CashFlowClassFixture
 {
-    private readonly HttpClient _httpClient;
-
     private const string METHOD = "api/User";
 
-    public RegisterUserTest(CustomWebApplicationFactory webApplicationFactory)
+    public RegisterUserTest(CustomWebApplicationFactory webApplicationFactory) : base(webApplicationFactory)
     {
-        _httpClient = webApplicationFactory.CreateClient();
     }
 
     [Fact]
@@ -25,7 +20,7 @@ public class RegisterUserTest: IClassFixture<CustomWebApplicationFactory>
     {
         var request = RequestRegisterUserJsonBuilder.Build();
 
-        var result = await _httpClient.PostAsJsonAsync(METHOD, request);
+        var result = await DoPost(METHOD, request);
 
         result.StatusCode.ShouldBe(HttpStatusCode.Created);
 
@@ -39,14 +34,12 @@ public class RegisterUserTest: IClassFixture<CustomWebApplicationFactory>
 
     [Theory]
     [ClassData(typeof(CultureInlineDataTest))]
-    public async Task Error_Empty_Name(string cultureInfo)
+    public async Task Error_Empty_Name(string culture)
     {
         var request = RequestRegisterUserJsonBuilder.Build();
         request.Name = string.Empty;
 
-        _httpClient.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(cultureInfo));
-
-        var result = await _httpClient.PostAsJsonAsync(METHOD, request);
+        var result = await DoPost(requestUri: METHOD, request: request, culture: culture);
 
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
@@ -56,7 +49,7 @@ public class RegisterUserTest: IClassFixture<CustomWebApplicationFactory>
 
         var errors = response.RootElement.GetProperty("errorMessages").EnumerateArray();
 
-        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("NAME_EMPTY", new CultureInfo(cultureInfo));
+        var expectedMessage = ResourceErrorMessages.ResourceManager.GetString("NAME_EMPTY", new CultureInfo(culture));
 
         errors.ShouldHaveSingleItem().GetString()!.ShouldBe(expectedMessage);
     }
