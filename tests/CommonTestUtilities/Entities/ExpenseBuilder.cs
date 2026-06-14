@@ -2,7 +2,7 @@
 using CashFlow.Domain.Entities;
 using CashFlow.Domain.Enums;
 
-namespace CommonTestUtilities.Repositories;
+namespace CommonTestUtilities.Entities;
 
 public class ExpenseBuilder
 {

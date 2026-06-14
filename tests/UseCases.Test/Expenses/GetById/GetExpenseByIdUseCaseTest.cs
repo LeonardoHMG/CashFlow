@@ -39,8 +39,7 @@ public class GetExpenseByIdUseCaseTest
             async () => await useCase.Execute(id: 1000)
         );
 
-        exception.GetErrors().Count.ShouldBe(1);
-        exception.GetErrors().ShouldContain(ResourceErrorMessages.EXPENSE_NOT_FOUND);
+        exception.GetErrors().ShouldHaveSingleItem().ShouldBe(ResourceErrorMessages.EXPENSE_NOT_FOUND);
     }
 
     private GetExpenseByIdUseCase CreateUseCase(User user, Expense? expense = null)
