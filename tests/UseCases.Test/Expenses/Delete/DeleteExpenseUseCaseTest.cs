@@ -1,0 +1,51 @@
+﻿using CashFlow.Application.UseCases.Expenses.Delete;
+using CashFlow.Domain.Entities;
+using CashFlow.Exception;
+using CashFlow.Exception.ExceptionsBase;
+using CommonTestUtilities.Entities;
+using CommonTestUtilities.LoggedUser;
+using CommonTestUtilities.Repositories;
+using Shouldly;
+
+namespace UseCases.Test.Expenses.Delete;
+public class DeleteExpenseUseCaseTest
+{
+    [Fact]
+    public async Task Success()
+    {
+        var loogedUser = UserBuilder.Build();
+        var expense = ExpenseBuilder.Build(loogedUser);
+
+        var useCase = CreateUseCase(loogedUser, expense);
+
+        var act = async () => await useCase.Execute(expense.Id);
+
+        await act.ShouldNotThrowAsync();
+    }
+
+    [Fact]
+    public async Task Error_Expense_Not_Found()
+    {
+        var loogedUser = UserBuilder.Build();
+
+        var useCase = CreateUseCase(loogedUser);
+
+        var exception = await Should.ThrowAsync<NotFoundException>(
+            async () => await useCase.Execute(id: 1000)
+        );
+
+        exception.GetErrors().Count.ShouldBe(1);
+        exception.GetErrors().ShouldContain(ResourceErrorMessages.EXPENSE_NOT_FOUND);
+
+    }
+
+    private DeleteExpenseUseCase CreateUseCase(User user, Expense? expense = null)
+    {
+        var repositoryWriteOnly = ExpensesWriteOnlyRepositoryBuilder.Build();
+        var respository = new ExpensesReadOnlyRepositoryBuilder().GetById(user, expense).Build();
+        var unitOfWork = UnitOfWorkBuilder.Build();
+        var loggedUser = LoggedUserBuilder.Build(user);
+
+        return new DeleteExpenseUseCase(repositoryWriteOnly, respository, unitOfWork, loggedUser);
+    }
+}
